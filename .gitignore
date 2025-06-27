@@ -1,0 +1,53 @@
+# Byte-compiled / optimized files
+__pycache__/
+*.py[cod]
+*.so
+
+# Virtual environment
+venv/
+.venv/
+env/
+
+# Python packaging
+*.egg-info/
+dist/
+build/
+
+# Pytest
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# IDE settings
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment/config
+.env
+secrets.txt
+*.env.*
+
+# Alembic (compiled versions or cache, optional)
+alembic/versions/*.pyc
+alembic/versions/__pycache__/
+
+# Docker
+*.pid
+*.log
+*.bak
+*.tar.gz
+
+# Redis (local dump file if any)
+dump.rdb
+
+# Test DBs
+test.db
+
+# Jupyter
+.ipynb_checkpoints/
