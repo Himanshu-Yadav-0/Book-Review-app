@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from fastapi.encoders import jsonable_encoder
 from app import schemas, crud
@@ -7,10 +7,10 @@ from typing import List
 from app.cache import get_cache, set_cache
 
 
-router = APIRouter(prefix="/books", tags=["Books"])
+router = APIRouter(prefix="/v1/books", tags=["Books"])
 
 
-@router.get("/", response_model=List[schemas.BookOut])
+@router.get("/", response_model=List[schemas.BookOut], status_code=status.HTTP_200_OK)
 def list_books(db: Session = Depends(get_db)):
     cache_key = "books:all"
     try:
@@ -34,6 +34,12 @@ def list_books(db: Session = Depends(get_db)):
     return books
 
 
-@router.post("/", response_model=schemas.BookOut)
+@router.post("/", response_model=schemas.BookOut, status_code=status.HTTP_201_CREATED)
 def add_book(book: schemas.BookCreate, db: Session = Depends(get_db)):
-    return crud.create_book(book, db)
+    try:
+        return crud.create_book(book, db)
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Error creating book: {str(e)}"
+        )

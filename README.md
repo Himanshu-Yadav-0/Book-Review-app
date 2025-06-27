@@ -5,6 +5,8 @@ A modern FastAPI-based Book Review system with Redis caching, PostgreSQL databas
 ## 🚀 Features
 
 - **RESTful API** for managing books and reviews
+- **API Versioning** with `/v1/` prefix for future compatibility
+- **Proper HTTP Status Codes** (200, 201, 400, 404, 422)
 - **Redis Caching** for improved performance
 - **PostgreSQL Database** with SQLAlchemy ORM
 - **Database Migrations** with Alembic
@@ -105,7 +107,7 @@ uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
 The API will be available at:
-- **API Base URL:** `http://localhost:8000`
+- **API Base URL:** `http://localhost:8000/v1`
 - **Interactive Docs:** `http://localhost:8000/docs`
 - **ReDoc:** `http://localhost:8000/redoc`
 
@@ -132,24 +134,32 @@ pytest tests/test_books.py
 
 ### Books Endpoints
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/books/` | Get all books (cached) |
-| POST | `/books/` | Create a new book |
+| Method | Endpoint | Description | Status Code |
+|--------|----------|-------------|-------------|
+| GET | `/v1/books/` | Get all books (cached) | 200 |
+| POST | `/v1/books/` | Create a new book | 201 |
 
 ### Reviews Endpoints
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/books/{book_id}/reviews` | Get reviews for a book |
-| POST | `/books/{book_id}/reviews` | Add review to a book |
+| Method | Endpoint | Description | Status Code |
+|--------|----------|-------------|-------------|
+| GET | `/v1/books/{book_id}/reviews` | Get reviews for a book | 200, 404 |
+| POST | `/v1/books/{book_id}/reviews` | Add review to a book | 201, 404, 400 |
+
+### HTTP Status Codes
+
+- **200 OK** - Successful GET requests
+- **201 Created** - Successful POST requests
+- **400 Bad Request** - Invalid input data
+- **404 Not Found** - Resource not found (book doesn't exist)
+- **422 Unprocessable Entity** - Validation errors
 
 ### Example API Calls
 
 #### Create a Book
 
 ```bash
-curl -X POST "http://localhost:8000/books/" \
+curl -X POST "http://localhost:8000/v1/books/" \
   -H "Content-Type: application/json" \
   -d '{
     "title": "Clean Code",
@@ -160,7 +170,7 @@ curl -X POST "http://localhost:8000/books/" \
 #### Add a Review
 
 ```bash
-curl -X POST "http://localhost:8000/books/1/reviews" \
+curl -X POST "http://localhost:8000/v1/books/1/reviews" \
   -H "Content-Type: application/json" \
   -d '{
     "rating": 5,
@@ -171,7 +181,7 @@ curl -X POST "http://localhost:8000/books/1/reviews" \
 #### Get All Books
 
 ```bash
-curl -X GET "http://localhost:8000/books/"
+curl -X GET "http://localhost:8000/v1/books/"
 ```
 
 ## 🏗 Project Structure
@@ -245,6 +255,8 @@ book-review-app/
 - Database operations use SQLAlchemy ORM for type safety
 - Tests cover both unit and integration scenarios
 - Migrations are managed through Alembic for safe database updates
+- API uses versioning (`/v1/`) for backward compatibility as the API evolves
+- Proper HTTP status codes are implemented for better client error handling
 
 ## 🤝 Contributing
 
