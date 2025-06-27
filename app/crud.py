@@ -1,9 +1,9 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from app import models, schemas
 from app.cache import delete_cache
 
 def get_all_books(db: Session):
-    return db.query(models.Book).all()
+    return db.query(models.Book).options(joinedload(models.Book.reviews)).all()
 
 def get_book_by_id(book_id: int, db: Session):
     return db.query(models.Book).filter(models.Book.id == book_id).first()
@@ -24,4 +24,5 @@ def add_review_to_book(book_id: int, review: schemas.ReviewCreate, db: Session):
     db.add(new_review)
     db.commit()
     db.refresh(new_review)
+    delete_cache("books:all")
     return new_review
