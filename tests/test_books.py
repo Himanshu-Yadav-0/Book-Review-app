@@ -42,7 +42,17 @@ def test_add_review():
     """
     Unit test for POST /v1/books/{book_id}/reviews endpoint
     """
-    book_id = 1
+    # First, create a book to add review to
+    book_payload = {
+        "title": "Programming Book",
+        "author": "Jane Doe"
+    }
+    book_response = client.post("/v1/books/", json=book_payload)
+    assert book_response.status_code == 201
+    book_data = book_response.json()
+    book_id = book_data["id"]
+    
+    # Now add review to the created book
     review_payload = {
         "rating": 5,
         "content": "Excellent book! Really helped me understand TDD concepts."
