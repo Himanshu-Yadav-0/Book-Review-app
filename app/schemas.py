@@ -6,7 +6,7 @@ class ReviewBase(BaseModel):
     content: str
     rating: int
     class Config:
-        from_attributes = True  # ✅ instead of orm_mode = True
+        from_attributes = True
 
 
 class ReviewCreate(ReviewBase):

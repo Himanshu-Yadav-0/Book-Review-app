@@ -1,7 +1,6 @@
-# app/models.py
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, func
 from sqlalchemy.orm import relationship
-from app.database import Base  # ✅ this is important!
+from app.database import Base
 
 class Book(Base):
     __tablename__ = "books"

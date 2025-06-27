@@ -8,7 +8,6 @@ router = APIRouter(prefix="/v1", tags=["Reviews"])
 
 @router.get("/books/{book_id}/reviews", response_model=List[schemas.ReviewOut], status_code=status.HTTP_200_OK)
 def get_reviews(book_id: int, db: Session = Depends(get_db)):
-    # Check if book exists
     book = crud.get_book_by_id(book_id, db)
     if not book:
         raise HTTPException(
@@ -19,7 +18,6 @@ def get_reviews(book_id: int, db: Session = Depends(get_db)):
 
 @router.post("/books/{book_id}/reviews", response_model=schemas.ReviewOut, status_code=status.HTTP_201_CREATED)
 def add_review(book_id: int, review: schemas.ReviewCreate, db: Session = Depends(get_db)):
-    # Check if book exists
     book = crud.get_book_by_id(book_id, db)
     if not book:
         raise HTTPException(

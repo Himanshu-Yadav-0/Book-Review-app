@@ -5,7 +5,6 @@ import redis
 
 client = TestClient(app)
 
-# Setup Redis client for test
 redis_client = redis.Redis(host="localhost", port=6379, db=0, decode_responses=True)
 
 
@@ -17,7 +16,7 @@ def test_get_books_cache_miss(monkeypatch):
     """
     Integration test: Cache MISS flow.
     """
-    clear_cache()  # ensure Redis is empty
+    clear_cache()  
 
     response = client.get("/v1/books/")
     assert response.status_code == 200
@@ -33,7 +32,7 @@ def test_add_book():
         "author": "Kent Beck"
     }
     response = client.post("/v1/books/", json=payload)
-    assert response.status_code == 201  # Updated to 201 Created
+    assert response.status_code == 201 
     data = response.json()
     assert data["title"] == "Test Driven Dev"
     assert data["author"] == "Kent Beck"
@@ -49,7 +48,7 @@ def test_add_review():
         "content": "Excellent book! Really helped me understand TDD concepts."
     }
     response = client.post(f"/v1/books/{book_id}/reviews", json=review_payload)
-    assert response.status_code == 201  # Updated to 201 Created
+    assert response.status_code == 201 
     data = response.json()
     assert data["rating"] == 5
     assert data["content"] == "Excellent book! Really helped me understand TDD concepts."
